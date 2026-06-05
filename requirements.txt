@@ -5,6 +5,4 @@ evaluate
 scikit-learn
 pandas
 numpy
-matplotlib
-jupyter
 pyyaml
