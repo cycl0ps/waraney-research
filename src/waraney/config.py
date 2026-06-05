@@ -1,14 +1,10 @@
-from dataclasses import dataclass
+import yaml
 
 
-@dataclass
-class ModelConfig:
-    model_name: str = "bert-base-uncased"
-    max_length: int = 256
+def load_config(path: str):
 
+    with open(path, "r") as f:
 
-@dataclass
-class TrainingConfig:
-    batch_size: int = 16
-    epochs: int = 5
-    learning_rate: float = 2e-5
+        config = yaml.safe_load(f)
+
+    return config
