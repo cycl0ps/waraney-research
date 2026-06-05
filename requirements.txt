@@ -1,0 +1,10 @@
+torch
+transformers
+datasets
+evaluate
+scikit-learn
+pandas
+numpy
+matplotlib
+jupyter
+pyyaml
