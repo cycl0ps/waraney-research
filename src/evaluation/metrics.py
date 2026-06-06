@@ -1,3 +1,5 @@
+import numpy as np
+
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -5,22 +7,44 @@ from sklearn.metrics import (
     f1_score
 )
 
-def classification_metrics(
-    y_true,
-    y_pred
+
+def compute_metrics(
+    eval_pred
 ):
+
+    logits, labels = eval_pred
+
+    predictions = np.argmax(
+        logits,
+        axis=1
+    )
 
     return {
 
         "accuracy":
-            accuracy_score(y_true, y_pred),
+            accuracy_score(
+                labels,
+                predictions
+            ),
 
         "precision":
-            precision_score(y_true, y_pred),
+            precision_score(
+                labels,
+                predictions,
+                zero_division=0
+            ),
 
         "recall":
-            recall_score(y_true, y_pred),
+            recall_score(
+                labels,
+                predictions,
+                zero_division=0
+            ),
 
         "f1":
-            f1_score(y_true, y_pred)
+            f1_score(
+                labels,
+                predictions,
+                zero_division=0
+            )
     }

@@ -1,14 +1,150 @@
-from .metrics import classification_metrics
+import pandas as pd
+import numpy as np
 
-class Evaluator:
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    classification_report
+)
 
-    @staticmethod
-    def evaluate(
-        y_true,
-        y_pred
+
+class WaraneyEvaluator:
+
+    def __init__(
+        self,
+        trainer
     ):
 
-        return classification_metrics(
+        self.trainer = trainer
+
+    def evaluate(
+        self,
+        dataset
+    ):
+
+        predictions = (
+            self.trainer.predict(
+                dataset
+            )
+        )
+
+        logits = predictions.predictions
+
+        y_pred = np.argmax(
+            logits,
+            axis=1
+        )
+
+        y_true = predictions.label_ids
+
+        metrics = {
+
+            "accuracy":
+                accuracy_score(
+                    y_true,
+                    y_pred
+                ),
+
+            "precision":
+                precision_score(
+                    y_true,
+                    y_pred,
+                    zero_division=0
+                ),
+
+            "recall":
+                recall_score(
+                    y_true,
+                    y_pred,
+                    zero_division=0
+                ),
+
+            "f1":
+                f1_score(
+                    y_true,
+                    y_pred,
+                    zero_division=0
+                )
+        }
+
+        return metrics
+
+    def confusion_matrix(
+        self,
+        dataset
+    ):
+
+        predictions = (
+            self.trainer.predict(
+                dataset
+            )
+        )
+
+        y_pred = np.argmax(
+            predictions.predictions,
+            axis=1
+        )
+
+        y_true = predictions.label_ids
+
+        return confusion_matrix(
             y_true,
             y_pred
         )
+
+    def classification_report(
+        self,
+        dataset
+    ):
+
+        predictions = (
+            self.trainer.predict(
+                dataset
+            )
+        )
+
+        y_pred = np.argmax(
+            predictions.predictions,
+            axis=1
+        )
+
+        y_true = predictions.label_ids
+
+        return classification_report(
+            y_true,
+            y_pred,
+            digits=4,
+            zero_division=0
+        )
+
+    def predictions_dataframe(
+        self,
+        dataset
+    ):
+
+        predictions = (
+            self.trainer.predict(
+                dataset
+            )
+        )
+
+        logits = predictions.predictions
+
+        y_pred = np.argmax(
+            logits,
+            axis=1
+        )
+
+        y_true = predictions.label_ids
+
+        return pd.DataFrame({
+
+            "label":
+                y_true,
+
+            "prediction":
+                y_pred
+        })

@@ -6,8 +6,5 @@ scikit-learn
 pandas
 numpy
 pyyaml
-json
 shutil
-yaml
 datetime
-pathlib

@@ -1,4 +1,68 @@
-from transformers import Trainer
+from pathlib import Path
+
+from transformers import (
+    Trainer,
+    TrainingArguments
+)
+
+from src.evaluation.metrics import (
+    compute_metrics
+)
+
+
+def build_training_arguments(config):
+
+    output_dir = (
+        Path(
+            config["output"]["root_dir"]
+        )
+        / "trainer_tmp"
+    )
+
+    return TrainingArguments(
+
+        output_dir=str(output_dir),
+
+        learning_rate=float(
+            config["training"]["learning_rate"]
+        ),
+
+        per_device_train_batch_size=int(
+            config["training"]["batch_size"]
+        ),
+
+        per_device_eval_batch_size=int(
+            config["training"]["batch_size"]
+        ),
+
+        num_train_epochs=int(
+            config["training"]["epochs"]
+        ),
+
+        seed=int(
+            config["training"]["seed"]
+        ),
+
+        eval_strategy=
+            config["training"][
+                "evaluation_strategy"
+            ],
+
+        save_strategy=
+            config["training"][
+                "save_strategy"
+            ],
+
+        logging_strategy=
+            config["training"][
+                "logging_strategy"
+            ],
+
+        report_to="none",
+
+        dataloader_pin_memory=False
+    )
+
 
 class WaraneyTrainer:
 
@@ -7,19 +71,39 @@ class WaraneyTrainer:
         model,
         training_args,
         train_dataset,
-        eval_dataset
+        validation_dataset
     ):
+
         self.trainer = Trainer(
+
             model=model,
+
             args=training_args,
+
             train_dataset=train_dataset,
-            eval_dataset=eval_dataset
+
+            eval_dataset=validation_dataset,
+
+            compute_metrics=compute_metrics
         )
 
     def train(self):
 
-        self.trainer.train()
+        return self.trainer.train()
 
     def evaluate(self):
 
         return self.trainer.evaluate()
+
+    def predict(
+        self,
+        dataset
+    ):
+
+        return self.trainer.predict(
+            dataset
+        )
+
+    def get_state(self):
+
+        return self.trainer.state
