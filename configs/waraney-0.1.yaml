@@ -27,5 +27,4 @@ training:
   max_length: 512
 
 output:
-  model_dir: artifacts/waraney-0.1
-  results_dir: results/waraney-0.1
+  root_dir: outputs
