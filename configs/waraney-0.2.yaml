@@ -1,12 +1,31 @@
 project:
   name: WARANEY
-  version: 0.1.0-dev
+  version: "0.2"
 
 model:
   backbone: bert-base-uncased
   num_labels: 2
 
+dataset:
+  source: data/dataset-waraney-1.0.csv
+  split_if_needed: true
+  train_ratio: 0.8
+  validation_ratio: 0.1
+  test_ratio: 0.1
+  random_state: 42
+  stratify_by: label
+
+  #stratify_by:
+  #- label
+  #- lang
+  #stratify_by: null
+
 training:
+  epochs: 3
   batch_size: 16
-  epochs: 5
   learning_rate: 2e-5
+  max_length: 512
+
+output:
+  model_dir: artifacts/waraney-0.2
+  results_dir: results/waraney-0.2

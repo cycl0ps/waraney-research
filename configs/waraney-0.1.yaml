@@ -7,9 +7,18 @@ model:
   num_labels: 2
 
 dataset:
-  train: data/processed/train.csv
-  validation: data/processed/validation.csv
-  test: data/processed/test.csv
+  source: data/dataset-waraney-1.0.csv
+  split_if_needed: true
+  train_ratio: 0.8
+  validation_ratio: 0.1
+  test_ratio: 0.1
+  random_state: 42
+  stratify_by: label
+
+  #stratify_by:
+  #- label
+  #- lang
+  #stratify_by: null
 
 training:
   epochs: 3
