@@ -1,14 +1,20 @@
-from dataclasses import dataclass
+from pathlib import Path
+import yaml
 
-@dataclass
-class TrainingConfig:
 
-    model_name: str
+def load_config(config_path: str) -> dict:
+    """
+    Load experiment configuration from YAML.
+    """
 
-    learning_rate: float = 2e-5
+    config_path = Path(config_path)
 
-    batch_size: int = 16
+    if not config_path.exists():
+        raise FileNotFoundError(
+            f"Config file not found: {config_path}"
+        )
 
-    epochs: int = 3
+    with open(config_path, "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
 
-    max_length: int = 512
+    return config

@@ -1,0 +1,12 @@
+project:
+  name: WARANEY
+  version: 0.1.0-dev
+
+model:
+  backbone: bert-base-uncased
+  num_labels: 2
+
+training:
+  batch_size: 16
+  epochs: 5
+  learning_rate: 2e-5

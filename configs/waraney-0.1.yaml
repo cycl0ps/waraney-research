@@ -1,0 +1,22 @@
+project:
+  name: WARANEY
+  version: "0.1"
+
+model:
+  backbone: distilbert-base-uncased
+  num_labels: 2
+
+dataset:
+  train: data/processed/train.csv
+  validation: data/processed/validation.csv
+  test: data/processed/test.csv
+
+training:
+  epochs: 3
+  batch_size: 16
+  learning_rate: 2e-5
+  max_length: 512
+
+output:
+  model_dir: artifacts/waraney-0.1
+  results_dir: results/waraney-0.1
