@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+from scipy.special import softmax
+
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -125,6 +127,8 @@ class WaraneyEvaluator:
         dataset
     ):
 
+        from scipy.special import softmax
+
         predictions = (
             self.trainer.predict(
                 dataset
@@ -133,18 +137,59 @@ class WaraneyEvaluator:
 
         logits = predictions.predictions
 
+        probabilities = softmax(
+            logits,
+            axis=1
+        )
+
         y_pred = np.argmax(
             logits,
             axis=1
         )
 
-        y_true = predictions.label_ids
+        prob_human = probabilities[:, 0]
+        prob_ai = probabilities[:, 1]
 
-        return pd.DataFrame({
+        confidence = np.max(
+            probabilities,
+            axis=1
+        )
 
-            "label":
-                y_true,
+        records = []
 
-            "prediction":
-                y_pred
-        })
+        for i in range(
+            len(dataset)
+        ):
+
+            row = dict(
+                dataset[i]
+            )
+
+            row.pop(
+                "text",
+                None
+            )
+
+            row["y_pred"] = int(
+                y_pred[i]
+            )
+
+            row["prob_human"] = float(
+                prob_human[i]
+            )
+
+            row["prob_ai"] = float(
+                prob_ai[i]
+            )
+
+            row["confidence"] = float(
+                confidence[i]
+            )
+
+            records.append(
+                row
+            )
+
+        return pd.DataFrame(
+            records
+        )
