@@ -31,8 +31,8 @@ training:
   seed: 42
 
   evaluation_strategy: epoch
-  save_strategy: epoch
+  save_strategy: "no"
   logging_strategy: epoch
 
 output:
-  root_dir: outputs
+  root_dir: /content/waraney-outputs
