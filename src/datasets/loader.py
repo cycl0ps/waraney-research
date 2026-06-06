@@ -1,8 +1,5 @@
 import pandas as pd
 
+def load_dataset(path):
 
-def load_dataset(path: str):
-
-    df = pd.read_csv(path)
-
-    return df
+    return pd.read_csv(path)
