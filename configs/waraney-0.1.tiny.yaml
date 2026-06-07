@@ -1,6 +1,6 @@
 project:
   name: WARANEY
-  version: "0.1"
+  version: "0.1.tiny"
 
 system:
   timezone: Asia/Jakarta
