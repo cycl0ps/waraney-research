@@ -23,7 +23,8 @@ class ProgressCallback(
         self,
         status,
         epoch,
-        global_step
+        global_step,
+        message=None
     ):
 
         payload = {
@@ -43,7 +44,10 @@ class ProgressCallback(
 
             "timestamp":
                 datetime.now()
-                .isoformat()
+                .isoformat(),
+
+            "message":
+                message
         }
 
         with open(
@@ -69,7 +73,8 @@ class ProgressCallback(
         self._save(
             status="RUNNING",
             epoch=0,
-            global_step=0
+            global_step=0,
+            message="Training started."
         )
 
     def on_epoch_end(
@@ -83,7 +88,8 @@ class ProgressCallback(
         self._save(
             status="RUNNING",
             epoch=state.epoch,
-            global_step=state.global_step
+            global_step=state.global_step,
+            message="Training in progress."
         )
 
     def on_train_end(
@@ -97,5 +103,37 @@ class ProgressCallback(
         self._save(
             status="COMPLETED",
             epoch=state.epoch,
-            global_step=state.global_step
+            global_step=state.global_step,
+            message="Training completed."
+        )
+
+    def on_log(
+        self,
+        args,
+        state,
+        control,
+        logs=None,
+        **kwargs
+    ):
+
+        self._save(
+            status="RUNNING",
+            epoch=state.epoch,
+            global_step=state.global_step,
+            message="Training in progress."
+        )
+
+    def on_save(
+        self,
+        args,
+        state,
+        control,
+        **kwargs
+    ):
+
+        self._save(
+            status="CHECKPOINT",
+            epoch=state.epoch,
+            global_step=state.global_step,
+            message="Checkpoint saved."
         )
