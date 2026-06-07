@@ -18,6 +18,11 @@ class TrainingLog:
             output_dir
         )
 
+        self.output_dir.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
         self.log_file = (
             self.output_dir
             / filename
@@ -95,8 +100,13 @@ class TrainingLog:
 
     def add_configuration(self):
 
-        training = self.config["training"]
-        model = self.config["model"]
+        training = (
+            self.config["training"]
+        )
+
+        model = (
+            self.config["model"]
+        )
 
         content = f"""
 ### Configuration
@@ -122,7 +132,9 @@ class TrainingLog:
         test_size
     ):
 
-        dataset = self.config["dataset"]
+        dataset = (
+            self.config["dataset"]
+        )
 
         content = f"""
 ### Dataset
@@ -140,14 +152,44 @@ class TrainingLog:
             content
         )
 
+    def add_notes(
+        self,
+        notes
+    ):
+
+        if not notes:
+            return
+
+        content = (
+            "\n### Notes\n\n"
+        )
+
+        for note in notes:
+
+            content += (
+                f"- {note}\n"
+            )
+
+        self.append(
+            content
+        )
+
     def add_validation_metrics(
         self,
         metrics
     ):
 
-        content = "\n### Validation Metrics\n\n"
-        content += "| Metric | Value |\n"
-        content += "|---------|---------|\n"
+        content = (
+            "\n### Validation Metrics\n\n"
+        )
+
+        content += (
+            "| Metric | Value |\n"
+        )
+
+        content += (
+            "|---------|---------|\n"
+        )
 
         for metric_name, value in metrics.items():
 
@@ -164,9 +206,17 @@ class TrainingLog:
         metrics
     ):
 
-        content = "\n### Test Metrics\n\n"
-        content += "| Metric | Value |\n"
-        content += "|---------|---------|\n"
+        content = (
+            "\n### Test Metrics\n\n"
+        )
+
+        content += (
+            "| Metric | Value |\n"
+        )
+
+        content += (
+            "|---------|---------|\n"
+        )
 
         for metric_name, value in metrics.items():
 
@@ -178,14 +228,8 @@ class TrainingLog:
             content
         )
 
-    def add_notes(
-        self,
-        notes
-    ):
+    def finalize(self):
 
-        content = "\n### Notes\n\n"
-
-        for note in notes:
-            content += f"- {note}\n"
-
-        self.append(content)
+        self.append(
+            "\n---\n"
+        )
