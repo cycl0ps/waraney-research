@@ -80,10 +80,6 @@ class TrainingLog:
             self.config["project"]["version"]
         )
 
-        backbone = (
-            self.config["model"]["backbone"]
-        )
-
         content = f"""
 ## {project_name}-{version}
 
@@ -91,23 +87,65 @@ class TrainingLog:
 |---------|---------|
 | Timestamp | {timestamp} |
 | Status | {status} |
-| Backbone | {backbone} |
-
-### Notes
-
--
 """
 
         self.append(
             content
         )
 
-    def add_metrics(
+    def add_configuration(self):
+
+        training = self.config["training"]
+        model = self.config["model"]
+
+        content = f"""
+### Configuration
+
+| Parameter | Value |
+|---------|---------|
+| Backbone | {model["backbone"]} |
+| Epochs | {training["epochs"]} |
+| Batch Size | {training["batch_size"]} |
+| Learning Rate | {training["learning_rate"]} |
+| Max Length | {training["max_length"]} |
+| Seed | {training["seed"]} |
+"""
+
+        self.append(
+            content
+        )
+
+    def add_dataset_summary(
+        self,
+        train_size,
+        validation_size,
+        test_size
+    ):
+
+        dataset = self.config["dataset"]
+
+        content = f"""
+### Dataset
+
+| Parameter | Value |
+|---------|---------|
+| Source | {dataset["source"]} |
+| Train Samples | {train_size} |
+| Validation Samples | {validation_size} |
+| Test Samples | {test_size} |
+| Stratify By | {dataset["stratify_by"]} |
+"""
+
+        self.append(
+            content
+        )
+
+    def add_validation_metrics(
         self,
         metrics
     ):
 
-        content = "\n### Metrics\n\n"
+        content = "\n### Validation Metrics\n\n"
         content += "| Metric | Value |\n"
         content += "|---------|---------|\n"
 
@@ -117,7 +155,24 @@ class TrainingLog:
                 f"| {metric_name} | {value} |\n"
             )
 
-        content += "\n---\n"
+        self.append(
+            content
+        )
+
+    def add_test_metrics(
+        self,
+        metrics
+    ):
+
+        content = "\n### Test Metrics\n\n"
+        content += "| Metric | Value |\n"
+        content += "|---------|---------|\n"
+
+        for metric_name, value in metrics.items():
+
+            content += (
+                f"| {metric_name} | {value} |\n"
+            )
 
         self.append(
             content
@@ -128,6 +183,14 @@ class TrainingLog:
         note
     ):
 
+        content = f"""
+### Notes
+
+- {note}
+
+---
+"""
+
         self.append(
-            f"- {note}"
+            content
         )
