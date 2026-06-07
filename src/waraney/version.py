@@ -1,3 +1,0 @@
-MODEL_NAME = "WARANEY"
-VERSION = "0.1"
-
