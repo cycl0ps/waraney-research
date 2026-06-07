@@ -12,11 +12,17 @@ from src.evaluation.metrics import (
 
 def build_training_arguments(config):
 
+    project_name = (
+        f"{config['project']['name']}-"
+        f"{config['project']['version']}"
+    )
+
     output_dir = (
         Path(
             config["output"]["root_dir"]
         )
-        / "trainer_tmp"
+        / "checkpoints"
+        / project_name
     )
 
     return TrainingArguments(
@@ -52,6 +58,12 @@ def build_training_arguments(config):
             config["training"][
                 "save_strategy"
             ],
+
+        save_total_limit=int(
+            config["training"][
+                "save_total_limit"
+            ]
+        ),
 
         logging_strategy=
             config["training"][
