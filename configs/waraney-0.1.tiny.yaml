@@ -1,16 +1,16 @@
 project:
   name: WARANEY
-  version: "0.2"
+  version: "0.1"
 
 system:
   timezone: Asia/Jakarta
 
 model:
-  backbone: bert-base-uncased
+  backbone: distilbert-base-uncased
   num_labels: 2
 
 dataset:
-  source: data/dataset-waraney-2.0.csv
+  source: data/dataset-waraney-2.0.tiny.csv
 
   split_if_needed: true
 
@@ -23,7 +23,7 @@ dataset:
   stratify_by: label
 
 training:
-  epochs: 3
+  epochs: 1
   batch_size: 16
   learning_rate: 0.00002
   max_length: 512

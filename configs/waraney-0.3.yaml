@@ -31,8 +31,15 @@ training:
   seed: 42
 
   evaluation_strategy: epoch
-  save_strategy: "no"
+
+  save_strategy: epoch
+  save_total_limit: 3
+
   logging_strategy: epoch
 
+checkpoint:
+  enabled: true
+  auto_resume: true
+
 output:
-  root_dir: /content/waraney-outputs
+  root_dir: /content/drive/MyDrive/Project-Disertasi/outputs
