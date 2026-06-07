@@ -178,19 +178,14 @@ class TrainingLog:
             content
         )
 
-    def add_note(
+    def add_notes(
         self,
-        note
+        notes
     ):
 
-        content = f"""
-### Notes
+        content = "\n### Notes\n\n"
 
-- {note}
+        for note in notes:
+            content += f"- {note}\n"
 
----
-"""
-
-        self.append(
-            content
-        )
+        self.append(content)
