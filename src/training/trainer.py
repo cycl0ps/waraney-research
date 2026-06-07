@@ -99,9 +99,15 @@ class WaraneyTrainer:
             compute_metrics=compute_metrics
         )
 
-    def train(self):
+    def train(
+        self,
+        resume_from_checkpoint=None
+    ):
 
-        return self.trainer.train()
+        return self.trainer.train(
+            resume_from_checkpoint=
+            resume_from_checkpoint
+        )
 
     def evaluate(self):
 
