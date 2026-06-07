@@ -83,7 +83,8 @@ class WaraneyTrainer:
         model,
         training_args,
         train_dataset,
-        validation_dataset
+        validation_dataset,
+        callbacks=None
     ):
 
         self.trainer = Trainer(
@@ -96,7 +97,9 @@ class WaraneyTrainer:
 
             eval_dataset=validation_dataset,
 
-            compute_metrics=compute_metrics
+            compute_metrics=compute_metrics,
+
+            callbacks=callbacks
         )
 
     def train(
