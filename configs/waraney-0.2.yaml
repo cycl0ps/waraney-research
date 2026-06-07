@@ -42,4 +42,4 @@ checkpoint:
   auto_resume: true
 
 output:
-  root_dir: /content/drive/MyDrive/Project-Disertasi/outputs
+  root_dir: outputs
