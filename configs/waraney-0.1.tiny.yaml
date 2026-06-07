@@ -23,7 +23,7 @@ dataset:
   stratify_by: label
 
 training:
-  epochs: 1
+  epochs: 3
   batch_size: 16
   learning_rate: 0.00002
   max_length: 512
