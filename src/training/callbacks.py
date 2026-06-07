@@ -2,6 +2,7 @@ import json
 
 from pathlib import Path
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from transformers import TrainerCallback
 
@@ -12,11 +13,21 @@ class ProgressCallback(
 
     def __init__(
         self,
-        progress_file
+        progress_file,
+        config
     ):
 
         self.progress_file = Path(
             progress_file
+        )
+
+        self.timezone = (
+            config
+            .get("system", {})
+            .get(
+                "timezone",
+                "Asia/Jakarta"
+            )
         )
 
     def _save(
@@ -43,8 +54,11 @@ class ProgressCallback(
                 global_step,
 
             "timestamp":
-                datetime.now()
-                .isoformat(),
+                datetime.now(
+                    ZoneInfo(
+                        self.timezone
+                    )
+                ).isoformat(),
 
             "message":
                 message
