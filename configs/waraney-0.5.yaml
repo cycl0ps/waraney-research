@@ -9,6 +9,10 @@ model:
   backbone: microsoft/deberta-v3-base
   num_labels: 2
 
+labels:
+  human: 0
+  ai: 1
+
 dataset:
   source: data/dataset-waraney-2.0.csv
 

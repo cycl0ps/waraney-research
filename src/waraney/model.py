@@ -11,11 +11,16 @@ class WaraneyModel:
 
         backbone = config["model"]["backbone"]
 
+        label2id = config["labels"]
+        id2label = {v: k for k, v in label2id.items()}
+
         self.tokenizer = AutoTokenizer.from_pretrained(
             backbone
         )
 
         self.model = AutoModelForSequenceClassification.from_pretrained(
             backbone,
-            num_labels=config["model"]["num_labels"]
+            num_labels=config["model"]["num_labels"],
+            label2id=label2id,
+            id2label=id2label
         )
