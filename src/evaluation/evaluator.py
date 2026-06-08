@@ -22,25 +22,39 @@ class WaraneyEvaluator:
 
         self.trainer = trainer
 
-    def evaluate(
+    def predict(
         self,
         dataset
     ):
 
-        predictions = (
-            self.trainer.predict(
-                dataset
-            )
+        return self.trainer.predict(
+            dataset
         )
 
-        logits = predictions.predictions
+    def _extract_labels(
+        self,
+        predictions
+    ):
 
         y_pred = np.argmax(
-            logits,
+            predictions.predictions,
             axis=1
         )
 
         y_true = predictions.label_ids
+
+        return y_true, y_pred
+
+    def evaluate(
+        self,
+        predictions
+    ):
+
+        y_true, y_pred = (
+            self._extract_labels(
+                predictions
+            )
+        )
 
         metrics = {
 
@@ -76,21 +90,14 @@ class WaraneyEvaluator:
 
     def confusion_matrix(
         self,
-        dataset
+        predictions
     ):
 
-        predictions = (
-            self.trainer.predict(
-                dataset
+        y_true, y_pred = (
+            self._extract_labels(
+                predictions
             )
         )
-
-        y_pred = np.argmax(
-            predictions.predictions,
-            axis=1
-        )
-
-        y_true = predictions.label_ids
 
         return confusion_matrix(
             y_true,
@@ -99,21 +106,14 @@ class WaraneyEvaluator:
 
     def classification_report(
         self,
-        dataset
+        predictions
     ):
 
-        predictions = (
-            self.trainer.predict(
-                dataset
+        y_true, y_pred = (
+            self._extract_labels(
+                predictions
             )
         )
-
-        y_pred = np.argmax(
-            predictions.predictions,
-            axis=1
-        )
-
-        y_true = predictions.label_ids
 
         return classification_report(
             y_true,
@@ -124,16 +124,9 @@ class WaraneyEvaluator:
 
     def predictions_dataframe(
         self,
+        predictions,
         dataset
     ):
-
-        from scipy.special import softmax
-
-        predictions = (
-            self.trainer.predict(
-                dataset
-            )
-        )
 
         logits = predictions.predictions
 
