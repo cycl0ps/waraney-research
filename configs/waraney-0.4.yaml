@@ -1,0 +1,45 @@
+project:
+  name: WARANEY
+  version: "0.4"
+
+system:
+  timezone: Asia/Jakarta
+
+model:
+  backbone: xlm-roberta-base
+  num_labels: 2
+
+dataset:
+  source: data/dataset-waraney-2.0.csv
+
+  split_if_needed: true
+
+  train_ratio: 0.8
+  validation_ratio: 0.1
+  test_ratio: 0.1
+
+  random_state: 42
+
+  stratify_by: label
+
+training:
+  epochs: 3
+  batch_size: 16
+  learning_rate: 0.00002
+  max_length: 512
+
+  seed: 42
+
+  evaluation_strategy: epoch
+
+  save_strategy: epoch
+  save_total_limit: 3
+
+  logging_strategy: epoch
+
+checkpoint:
+  enabled: true
+  auto_resume: true
+
+output:
+  root_dir: outputs
