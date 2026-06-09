@@ -1,3 +1,5 @@
+import torch
+
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification
@@ -22,5 +24,13 @@ class WaraneyModel:
             backbone,
             num_labels=config["model"]["num_labels"],
             label2id=label2id,
-            id2label=id2label
+            id2label=id2label,
+            torch_dtype=torch.float32
+        )
+
+        print(
+            "MODEL DTYPE:",
+            next(
+                self.model.parameters()
+            ).dtype
         )
