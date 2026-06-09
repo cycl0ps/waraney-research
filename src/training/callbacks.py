@@ -151,3 +151,42 @@ class ProgressCallback(
             global_step=state.global_step,
             message="Checkpoint saved."
         )
+
+import torch
+
+class NaNDetectorCallback(
+    TrainerCallback
+):
+
+    def on_step_end(
+        self,
+        args,
+        state,
+        control,
+        model=None,
+        **kwargs
+    ):
+
+        if state.global_step % 50 != 0:
+            return
+
+        total_nan = sum(
+            torch.isnan(p).sum().item()
+            for p in model.parameters()
+        )
+
+        print(
+            f"[NaNDetector] "
+            f"STEP={state.global_step} "
+            f"TOTAL_NAN={total_nan}"
+        )
+
+        if total_nan > 0:
+
+            print(
+                f"[NaNDetector] "
+                f"NaN detected at step "
+                f"{state.global_step}"
+            )
+
+            control.should_training_stop = True
