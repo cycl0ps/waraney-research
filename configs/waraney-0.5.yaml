@@ -6,7 +6,7 @@ system:
   timezone: Asia/Jakarta
 
 model:
-  backbone: microsoft/deberta-v3-large
+  backbone: microsoft/deberta-v3-base
   num_labels: 2
 
 labels:
