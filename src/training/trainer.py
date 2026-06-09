@@ -72,9 +72,13 @@ def build_training_arguments(config):
 
         report_to="none",
 
-        dataloader_pin_memory=False
-    )
+        dataloader_pin_memory=False,
 
+        optim=config["training"].get(
+            "optimizer",
+            "adamw_torch_fused"
+        )
+    )
 
 class WaraneyTrainer:
 
