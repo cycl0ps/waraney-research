@@ -1,4 +1,5 @@
 import json
+import torch
 
 from pathlib import Path
 from datetime import datetime
@@ -152,11 +153,18 @@ class ProgressCallback(
             message="Checkpoint saved."
         )
 
-import torch
-
 class NaNDetectorCallback(
     TrainerCallback
 ):
+
+    def __init__(
+        self,
+        check_every_steps=50
+    ):
+
+        self.check_every_steps = (
+            check_every_steps
+        )
 
     def on_step_end(
         self,
@@ -167,12 +175,22 @@ class NaNDetectorCallback(
         **kwargs
     ):
 
-        if state.global_step % 50 != 0:
-            return
+        if model is None:
+            return control
+
+        if (
+            state.global_step == 0
+            or
+            state.global_step
+            % self.check_every_steps != 0
+        ):
+            return control
 
         total_nan = sum(
-            torch.isnan(p).sum().item()
-            for p in model.parameters()
+            torch.isnan(param)
+            .sum()
+            .item()
+            for param in model.parameters()
         )
 
         print(
@@ -185,8 +203,10 @@ class NaNDetectorCallback(
 
             print(
                 f"[NaNDetector] "
-                f"NaN detected at step "
-                f"{state.global_step}"
+                f"NaN detected at "
+                f"step {state.global_step}"
             )
 
             control.should_training_stop = True
+
+        return control
